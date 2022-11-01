@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+  postgres:
+    container_name: postgres-sewan
+    image: postgis/postgis:14-3.2
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ${POSTGRES_DB_DATA_DIRECTORY}:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: appdbuser
+      POSTGRES_PASSWORD: appdbpassword
+      POSTGRES_DB: sewam
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appdbuser -d sewam"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: postgres -c shared_buffers=256MB -c max_connections=200
+    env_file:
+      - .env
+
+  api:
+    container_name: api
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+      args:
+        - NODE_ENV=development
+    volumes:
+      - ../src:/api/src
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+      - 9229:9229
+    depends_on:
+      - postgres
+    command: yarn nodemon
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgres://appdbuser:appdbpassword@postgres:5432/sewan
+    env_file:
+      - .env

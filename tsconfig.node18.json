@@ -1,0 +1,19 @@
+// Officially recommended node.js 18 base tsconfig.
+// Copy-pasted from: https://github.com/tsconfig/bases
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 18",
+
+  "compilerOptions": {
+    "lib": ["ES2021"],
+    "module": "ES2022",
+    "target": "ES2021",
+    "moduleResolution": "node",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false
+  }
+}

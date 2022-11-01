@@ -1,0 +1,16 @@
+{
+  "watch": [
+    "./src"
+  ],
+
+  "ext": "js, ts, json, yaml, yml",
+
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG_DEPTH": "null",
+    "CHECKPOINT_DISABLE": 1
+  },
+
+  "ignoreRoot": [".git"],
+  "exec": "node --loader ts-node/esm --inspect=0.0.0.0:9229 --es-module-specifier-resolution=node ./src/index.ts"
+}

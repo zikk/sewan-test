@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.node18.json",
+  "exclude": [
+    "node_modules",
+    "**/*/dist",
+    "**/*.test.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@sawem/*": [
+        "./apps/*",
+        "./packages/*"
+      ]
+    }
+  },
+  "include": [".eslintrc.cjs", "./**/*.ts"],
+  "ts-node": {
+    "files": true
+  }
+}
