@@ -42,6 +42,20 @@ export class MessagePrismaRepository implements MessageRepository {
     return MessageMapper.toDomain(message, statuses);
   }
 
+  async getAll(): Promise<Message[]> {
+    const rawMessages = await this.database.prisma.message.findMany({
+      include: {
+        statuses: true,
+      },
+    });
+
+    return rawMessages.map((rawMessage) => {
+      const { statuses, ...message } = rawMessage;
+
+      return MessageMapper.toDomain(message, statuses);
+    });
+  }
+
   async save(message: Message): Promise<void> {
     const exists = await this.exists(message.id);
     const rawMessage = MessageMapper.toPersistence(message);

@@ -4,6 +4,7 @@ export default `
   }
 
   type Status {
+    status: String
     sentAt: String
     target: String
     failMessage: String
@@ -11,7 +12,7 @@ export default `
 
   type Message {
     id: String
-    created_at: String
+    createdAt: String
     status: String
     content: String
     statuses: [Status]

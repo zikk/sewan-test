@@ -1,6 +1,12 @@
-import { sendMessageUseCase } from '../../../modules/messages/use-cases';
+import { getMessagesUseCase, sendMessageUseCase } from '../../../modules/messages/use-cases';
 
 export default {
+  Query: {
+    async getMessages() {
+      return getMessagesUseCase.execute();
+    },
+  },
+
   Mutation: {
     async sendMessage(_, { message }: { message: string }): Promise<{ created: boolean }> {
       if (!message) {
