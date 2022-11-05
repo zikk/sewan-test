@@ -18,6 +18,11 @@ await app.register(mercurius, {
   path: '/graphql',
 });
 
+app.post('/logs', async (request, reply) => {
+  logger.info(request.body);
+  reply.send();
+});
+
 try {
   await initDatabase();
   await app.ready();

@@ -8,6 +8,7 @@ dotenv.config({ path: CONFIG_PATH });
 
 let envConfig: {
   messagesLogFile: string;
+  httpLogUrl: string;
 };
 
 switch (process.env.NODE_ENV) {

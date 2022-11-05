@@ -7,4 +7,5 @@ const __dirname = path.dirname(__filename);
 
 export default {
   messagesLogFile: path.join(__dirname, '../../logs/messages.log'),
+  httpLogUrl: 'http://localhost:3000/logs',
 };

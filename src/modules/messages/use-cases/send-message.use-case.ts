@@ -3,6 +3,7 @@ import { MessageStatus } from '../domain/message-status.entity';
 import { MessageTarget } from '../domain/message-target.value-object';
 import { Message } from '../domain/message.entity';
 import { MessageRepository } from '../repos/message.repository';
+import { MessageHttpService } from '../services/message-http.service';
 import { MessageLoggerService } from '../services/message-logger.service';
 
 type SendMessageDTO = {
@@ -20,19 +21,40 @@ export namespace sendMessageErrors {
 export class SendMessageUseCase implements UseCase<SendMessageDTO, Promise<Message>> {
   private messageRepository: MessageRepository;
   private messageLoggerService: MessageLoggerService;
+  private messageHttpService: MessageHttpService;
 
   constructor({
     messageRepository,
     messageLoggerService,
+    messageHttpService,
   }: {
     messageRepository: MessageRepository;
     messageLoggerService: MessageLoggerService;
+    messageHttpService: MessageHttpService;
   }) {
     this.messageRepository = messageRepository;
     this.messageLoggerService = messageLoggerService;
+    this.messageHttpService = messageHttpService;
   }
 
-  async sendMessageToTargets(message: Message) {
+  async sendMessageToLogger(message: Message) {
+    const httpLogStatus = MessageStatus.create({
+      messageId: message.id,
+      target: MessageTarget.create('HTTP'),
+    });
+    await this.messageRepository.saveStatus(httpLogStatus);
+
+    try {
+      await this.messageHttpService.send(message);
+      httpLogStatus.markAsSent();
+      await this.messageRepository.saveStatus(httpLogStatus);
+    } catch (error: any) {
+      httpLogStatus.markAsFailed(error.message);
+      await this.messageRepository.saveStatus(httpLogStatus);
+    }
+  }
+
+  async sendMessageToHttp(message: Message) {
     const logStatus = MessageStatus.create({
       messageId: message.id,
       target: MessageTarget.create('LOG'),
@@ -47,6 +69,10 @@ export class SendMessageUseCase implements UseCase<SendMessageDTO, Promise<Messa
       logStatus.markAsFailed(error.message);
       await this.messageRepository.saveStatus(logStatus);
     }
+  }
+
+  async sendMessageToTargets(message: Message) {
+    await Promise.all([this.sendMessageToLogger(message), this.sendMessageToHttp(message)]);
   }
 
   async execute(request: SendMessageDTO): Promise<Message> {
