@@ -1,6 +1,10 @@
-import { EntityId } from 'src/shared/core/domain/entity-id';
+import { EntityId } from '../../../shared/core/domain/entity-id';
+import { MessageStatus } from '../domain/message-status.entity';
 import { Message } from '../domain/message.entity';
 
 export interface MessageRepository {
-  get(id: EntityId): Promise<Message>;
+  exists(id: EntityId): Promise<boolean>;
+  get(id: EntityId): Promise<Message | null>;
+  save(message: Message): Promise<void>;
+  saveStatus(status: MessageStatus): Promise<void>;
 }

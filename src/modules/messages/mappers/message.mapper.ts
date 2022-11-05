@@ -1,21 +1,24 @@
-import { Message as MessagePrisma } from '@prisma/client';
-import { EntityId } from 'src/shared/core/domain/entity-id';
+import { Message as MessagePrisma, MessageStatus as MessageStatusPrisma } from '@prisma/client';
+import { EntityId } from '../../../shared/core/domain/entity-id';
 import { Message } from '../domain/message.entity';
 import { MessageDTO } from '../dtos/message.dto';
+import { MessageStatusMapper } from './message-status.mapper';
 
 export class MessageMapper {
-  public static toPersistence(message: Message): Record<string, any> {
+  public static toPersistence(message: Message): MessagePrisma {
     return {
-      id: message.id.toValue,
-      message: message.content,
+      id: message.id.toValue(),
+      created_at: message.createdAt,
+      content: message.content,
     };
   }
 
-  public static toDomain(raw: MessagePrisma): Message {
+  public static toDomain(raw: MessagePrisma, statuses: MessageStatusPrisma[]): Message {
     return Message.create(
       {
         content: raw.content,
-        createdAt: raw.createdAt,
+        createdAt: raw.created_at,
+        statuses: statuses?.map(MessageStatusMapper.toDomain),
       },
       new EntityId(raw.id),
     );
@@ -25,6 +28,8 @@ export class MessageMapper {
     return {
       id: message.id.toValue(),
       content: message.content,
+      createdAt: message.createdAt?.toISOString(),
+      statuses: message.statuses?.map(MessageStatusMapper.toDTO),
     };
   }
 }

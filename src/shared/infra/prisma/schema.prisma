@@ -8,7 +8,22 @@ datasource db {
 }
 
 model Message {
-  id        String   @id
-  createdAt DateTime @default(now())
-  content   String
+  id            String          @id
+  created_at    DateTime        @default(now())
+  content       String
+  statuses MessageStatus[]
+
+  @@map("messages")
+}
+
+model MessageStatus {
+  message_id   String
+  message      Message @relation(fields: [message_id], references: [id])
+  target       String
+  sent_at      DateTime?
+  status       String
+  fail_message String?
+
+  @@id([message_id, target])
+  @@map("messages_status")
 }

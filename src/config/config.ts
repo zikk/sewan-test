@@ -7,18 +7,18 @@ const CONFIG_PATH = path.join(process.cwd(), './environment', '.env');
 dotenv.config({ path: CONFIG_PATH });
 
 let envConfig: {
-  someEnvVar: string;
+  messagesLogFile: string;
 };
 
 switch (process.env.NODE_ENV) {
   case 'test':
-    envConfig = (await import('./test')) as any;
+    envConfig = (await import('./test')).default;
     break;
   case 'development':
-    envConfig = (await import('./development')) as any;
+    envConfig = (await import('./development')).default;
     break;
   case 'production':
-    envConfig = (await import('./production')) as any;
+    envConfig = (await import('./production')).default;
     break;
   default:
     throw new Error(`NODE_ENV ${process.env.NODE_ENV} is not supported`);

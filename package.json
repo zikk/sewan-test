@@ -12,8 +12,11 @@
     "start:infra": "cd ./environment && docker-compose up postgres",
     "stop:infra": "cd ./environment && docker-compose stop",
     "build:api": "rm -rf ./dist && tsc",
-    "start:api": "cd ./environment && docker-compose up --build api",
-    "serve:api": "node dist/index.js"
+    "start:api": "cd ./environment && docker-compose up api",
+    "serve:api": "node dist/index.js",
+    "migrate:dev": "yarn dotenv -e ./environment/.env yarn prisma migrate dev",
+    "migrate": "cd ./environment && docker-compose up migrate",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "schema": "./src/shared/infra/prisma/schema.prisma"
@@ -33,9 +36,11 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.187",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "dotenv-cli": "^6.0.0",
     "eslint": "^8.26.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",

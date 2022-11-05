@@ -1,17 +1,27 @@
 export default `
-  enum MessageTarget {
-    LOG
-    EMAIL
-    HTTP
-    SMS
-    SLACK
+  type SendMessageResponse {
+    created: Boolean
+  }
+
+  type Status {
+    sentAt: String
+    target: String
+    failMessage: String
+  }
+
+  type Message {
+    id: String
+    created_at: String
+    status: String
+    content: String
+    statuses: [Status]
   }
 
   type Query {
-    hello: String
+    getMessages: [Message]
   }
 
   type Mutation {
-    sendMessage(taget: MessageTarget, message: String): Boolean
+    sendMessage(message: String): SendMessageResponse
   }
 `;

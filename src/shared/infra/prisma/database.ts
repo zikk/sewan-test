@@ -2,7 +2,7 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import config from '../../../config';
 import logger from '../logger';
 
-const { uri: DATABASE_URL } = config.database;
+const { url: DATABASE_URL } = config.database;
 export const database: { prisma?: PrismaClient } = {};
 
 type PrismaClientOptionsType = Prisma.Subset<

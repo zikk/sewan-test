@@ -2,7 +2,7 @@ version: "3.8"
 services:
   postgres:
     container_name: postgres-sewan
-    image: postgis/postgis:14-3.2
+    image: postgres:15.0
     restart: always
     ports:
       - 5432:5432
@@ -22,7 +22,7 @@ services:
       - .env
 
   api:
-    container_name: api
+    container_name: api-sewan
     build:
       context: ../
       dockerfile: ./Dockerfile
@@ -38,6 +38,30 @@ services:
     depends_on:
       - postgres
     command: yarn nodemon
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgres://appdbuser:appdbpassword@postgres:5432/sewan
+    env_file:
+      - .env
+
+  migrate:
+    container_name: migration-sewam
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+      args:
+        - NODE_ENV=development
+    volumes:
+      - ../src:/api/src
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+      - 9229:9229
+    depends_on:
+      - postgres
+    command: yarn prisma migrate deploy
     environment:
       NODE_ENV: development
       PORT: 3000
