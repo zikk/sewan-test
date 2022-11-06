@@ -3,19 +3,12 @@
   "exclude": [
     "node_modules",
     "**/*/dist",
-    "**/*.test.ts"
   ],
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
-    "paths": {
-      "@sawem/*": [
-        "./apps/*",
-        "./packages/*"
-      ]
-    }
+    "types": ["node", "jest"],
   },
-  "include": [".eslintrc.cjs", "./**/*.ts"],
   "ts-node": {
     "files": true
   }

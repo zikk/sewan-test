@@ -1,10 +1,14 @@
 module.exports = {
+  env: {
+    node: true,
+    jest: true,
+  },
+
   extends: ['airbnb-base', 'airbnb-typescript/base', 'plugin:prettier/recommended'],
   plugins: ['prettier'],
 
   parserOptions: {
-    project: './tsconfig.json',
-    include: ['src/**/*.ts'],
+    project: './tsconfig.eslint.json',
   },
 
   rules: {

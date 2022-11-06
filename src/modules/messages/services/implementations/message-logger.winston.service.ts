@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-
 import { createLogger, format, Logger, transports } from 'winston';
 import { Message } from '../../domain/message.entity';
 import { MessageLoggerService } from '../message-logger.service';

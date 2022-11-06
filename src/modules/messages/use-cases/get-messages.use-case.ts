@@ -3,7 +3,7 @@ import { Message } from '../domain/message.entity';
 import { MessageMapper } from '../mappers/message.mapper';
 import { MessageRepository } from '../repos/message.repository';
 
-export class GetMessages implements UseCase<any, Message[]> {
+export class GetMessagesUseCase implements UseCase<any, Message[]> {
   private messageRepository: any;
 
   constructor(messageRepository: MessageRepository) {
